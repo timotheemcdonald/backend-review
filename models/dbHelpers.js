@@ -5,7 +5,9 @@ const db = knex(config.development)
 
 module.exports = {
     add,
-    find
+    find,
+    findById,
+    remove,
 }
 
 async function add(user){
@@ -16,4 +18,16 @@ async function add(user){
 
 function find() {
     return db('users')
+}
+
+function findById(id){
+    return db('users')
+    .where({id})
+    .first()
+}
+
+function remove(id){
+    return db('users')
+    .where({id})
+    .del()
 }

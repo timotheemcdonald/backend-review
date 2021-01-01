@@ -17,7 +17,7 @@ server.post('/api/users', (req, res) => {
         res.status(200).json(user)
     })
     .catch(error => {
-        res.status(500).json({ message: 'cannot add user'})
+        res.status(500).json({ message: 'Cannot add User'})
     })
 })
 
@@ -29,6 +29,38 @@ server.get('/api/users', (req, res) => {
     .catch(error => {
         res.status(500).json({message: 'Unable to find Users'})
     })
+})
+
+server.get('/api/users/:id', (req, res) => {
+    const {id} = req.params
+
+    Users.findById(id)
+    .then(user => {
+        if(user){
+            res.status(200).json(user)
+        }else{
+            res.status(404).json({ message: 'Cannot find User with that ID'})
+        }
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Cannot perform Operation'})
+    })
+})
+
+server.delete('/api/users/:id', (req, res) => {
+    const {id} = req.params
+
+    Users.remove(id)
+        .then(user => {
+            if(user > 0){
+                res.status(200).json({message: 'User Deleted'})
+            } else {
+                res.status(404).json({message: 'Unable to Locate User for Deletion'})
+            }
+        })
+        .catch(error => {
+            res.status(500).json({message: 'Unable to Perform Deletion'})
+        })
 })
 
 server.listen(PORT, () => {
