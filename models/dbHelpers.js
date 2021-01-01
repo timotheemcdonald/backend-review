@@ -8,12 +8,13 @@ module.exports = {
     find,
     findById,
     remove,
+    update,
 }
 
 async function add(user){
    const [id] = await db('users').insert(user)
 
-   return id
+   return user
 }
 
 function find() {
@@ -30,4 +31,13 @@ function remove(id){
     return db('users')
     .where({id})
     .del()
+}
+
+function update(id, changes){
+    return db('users')
+        .where({id})
+        .update(changes, [id])
+        .then( () => {
+            return findById(id)
+        })
 }

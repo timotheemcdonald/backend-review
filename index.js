@@ -63,6 +63,23 @@ server.delete('/api/users/:id', (req, res) => {
         })
 })
 
+server.patch('/api/users/:id', (req, res) => {
+    const {id} = req.params
+    const changes = req.body
+
+    Users.update(id, changes)
+    .then(user => {
+        if(user){
+            res.status(200).json(user)
+        } else {
+            res.status(404).json({message: 'User Not Found'})
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: 'Error updating User'})
+    })
+})
+
 server.listen(PORT, () => {
     console.log(`\n** Server running on port ${PORT} **\n`)
 })
