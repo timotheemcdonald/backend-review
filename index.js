@@ -80,6 +80,37 @@ server.patch('/api/users/:id', (req, res) => {
     })
 })
 
+server.post("/api/users/:id/posts", (req, res) => {
+    const {id} = req.params
+    const post = req.body
+
+    if(!post.user_id){
+        post['user_id'] = parseInt(id, 10)
+    }
+
+    Users.findById(id)
+    .then(user => {
+        if(!user){
+            res.status(404).json({message: "Invalid User Id"})
+        }
+        if(!post.title || !post.post){
+            res.status(400).json({message: "Must provide both Title and Post"})
+        }
+        Users.addPost(post, id)
+        .then(post => {
+            if(post){
+                res.status(200).json(post)
+            }
+        })
+        .catch(error => {
+            res.status(500).json({message: "Failed to add Post"})
+        })
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error finding User"})
+    })
+})
+
 server.listen(PORT, () => {
     console.log(`\n** Server running on port ${PORT} **\n`)
 })
