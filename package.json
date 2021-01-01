@@ -1,0 +1,28 @@
+{
+  "name": "backend-review",
+  "version": "1.0.0",
+  "description": "Backend with Node, Knex, Express, SQLite",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timotheemcdonald/backend-review.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timotheemcdonald/backend-review/issues"
+  },
+  "homepage": "https://github.com/timotheemcdonald/backend-review#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.21.15",
+    "sqlite3": "^5.0.0"
+  }
+}
