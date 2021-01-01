@@ -7,7 +7,7 @@ exports.up = function(knex) {
       .unique()
       tbl.string('password', 12)
       .notNullable()
-      tbl.timestamp(true, true)
+      tbl.timestamps(true, true)
   })
   .createTable('posts', tbl => {
       tbl.increments()
@@ -15,7 +15,7 @@ exports.up = function(knex) {
       .notNullable()
       tbl.text('postContent')
       .notNullable()
-      tbl.timestamp(true, true)
+      tbl.timestamps(true, true)
     //foreign key to users
       tbl.integer('user_id')
       .unsigned()

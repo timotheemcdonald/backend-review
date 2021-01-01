@@ -1,0 +1,8 @@
+//knex queries
+const knex = require('knex')
+const config = require('../knexfile')
+const db = knex(config.development)
+
+function add(user){
+    
+}
