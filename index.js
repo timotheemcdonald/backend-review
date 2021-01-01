@@ -111,6 +111,17 @@ server.post("/api/users/:id/posts", (req, res) => {
     })
 })
 
+server.get('/api/users/:id/posts', (req, res) => {
+    const {id} = req.params
+    Users.findUserPosts(id)
+    .then(posts => {
+        res.status(200).json(posts)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error retrieving Posts"})
+    })
+})
+
 server.listen(PORT, () => {
     console.log(`\n** Server running on port ${PORT} **\n`)
 })

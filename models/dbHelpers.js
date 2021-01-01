@@ -11,6 +11,8 @@ module.exports = {
     update,
     findPostById,
     addPost,
+    findUserPosts,
+    updatePost,
 }
 
 async function add(user){
@@ -55,4 +57,21 @@ async function addPost(post, user_id){
     .where({user_id})
     .insert(post)
     return findPostById(id);
+}
+
+function findUserPosts(user_id){
+    return db("users")
+    .join("posts", "users.id", "posts.user_id")
+    .select(
+        "users.id as userID",
+        "users.username as userName",
+        "posts.id as postID",
+        "posts.title",
+        "posts.post"
+    )
+    .where({user_id})
+}
+
+function updatePost(){
+
 }
