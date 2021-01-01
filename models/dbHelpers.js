@@ -13,6 +13,7 @@ module.exports = {
     addPost,
     findUserPosts,
     updatePost,
+    removePost,
 }
 
 async function add(user){
@@ -64,7 +65,7 @@ function findUserPosts(user_id){
     .join("posts", "users.id", "posts.user_id")
     .select(
         "users.id as userID",
-        "users.username as userName",
+        "users.username as username",
         "posts.id as postID",
         "posts.title",
         "posts.post"
@@ -72,6 +73,17 @@ function findUserPosts(user_id){
     .where({user_id})
 }
 
-function updatePost(){
+function updatePost(id, changes){
+    return db("posts")
+    .where({id})
+    .update(changes, [id])
+    .then( () => {
+        return findPostById(id)
+    })
+}
 
+function removePost(id){
+    return db("posts")
+    .where({id})
+    .del();
 }
