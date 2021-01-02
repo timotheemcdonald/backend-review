@@ -5,13 +5,24 @@ const router = express.Router()
 
 //all endpoints are for /api/users/
 //create a user
-router.post('/', (req, res) => {
-    Users.add(req.body)
+router.post('/register', (req, res) => {
+    const credentials = req.body
+    const {username, password} = credentials
+
+    if(!(username && password)){
+        return res.status(400).json({message: "Username and Password Required"})
+    }
+
+    Users.add(credentials)
         .then(user => {
             res.status(200).json(user)
         })
         .catch(error => {
-            res.status(500).json({ message: 'Cannot add User' })
+            if(error.error == 19){
+                res.status(400).json({message: "Username Taken"})
+            } else {
+            res.status(500).json({ message: 'Error Registering User' })
+            }
         })
 })
 
@@ -41,6 +52,18 @@ router.get('/:id', (req, res) => {
         .catch(error => {
             res.status(500).json({ message: 'Cannot perform Operation' })
         })
+})
+
+//get user by username
+router.get('/:username', (req, res) => {
+    const {username} = req.params
+    Users.findUserByUsername(username)
+    .then(user => {
+        res.status(200).json(user)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error Finding User by Username"})
+    })
 })
 
 //delete a user, id required

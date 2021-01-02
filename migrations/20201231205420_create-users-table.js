@@ -5,9 +5,10 @@ exports.up = function (knex) {
     tbl.string('username', 12)
       .notNullable()
       .unique()
+      .index()
     tbl.string('password', 12)
       .notNullable()
-    tbl.date('created_on')
+    tbl.timestamp('created_at').defaultTo(knex.fn.now())
   })
     .createTable('posts', tbl => {
       tbl.increments()

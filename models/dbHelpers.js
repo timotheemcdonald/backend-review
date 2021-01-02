@@ -16,6 +16,8 @@ module.exports = {
     findUserPosts,
     updatePost,
     removePost,
+    findUserByUsername,
+    findPostByTitle,
 }
 
 async function add(user) {
@@ -26,6 +28,14 @@ async function add(user) {
 
 function find() {
     return db('users')
+}
+
+function findUserByUsername(username){
+    return db("users").where({username}).first()
+}
+
+function findPostByTitle(title){
+    return db("posts").where({title}).first()
 }
 
 function findById(id) {

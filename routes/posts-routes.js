@@ -4,6 +4,19 @@ const Users = require('../models/dbHelpers')
 const router = express.Router()
 
 //all endpoints are for /api/posts
+
+//find post by title
+router.get('/:title', (req, res) => {
+    const {title} = req.params
+    Users.findPostByTitle(title)
+    .then(title => {
+        res.status(200).json(title)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error Finding Post by Title"})
+    })
+})
+
 //edit a post, id required
 router.patch('/:id', (req, res) => {
     const { id } = req.params
