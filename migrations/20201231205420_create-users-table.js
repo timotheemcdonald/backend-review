@@ -69,12 +69,12 @@ exports.up = function (knex) {
         .onUpdate('CASCADE')
       //profile foreign key
       tbl.integer('profile_id')
-      .unsigned()
-      .notNullable()
-      .references('id')
-      .inTable('profile')
-      .onDelete('CASCADE')
-      .onUpdate('CASCADE')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('profile')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
     })
 };
 
