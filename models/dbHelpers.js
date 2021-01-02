@@ -1,7 +1,9 @@
-//knex queries
-const knex = require('knex')
-const config = require('../knexfile')
-const db = knex(config.development)
+// //knex queries
+// const knex = require('knex')
+// const config = require('../knexfile')
+// const db = knex(config.development)
+
+const db = require('../dbConfig')
 
 module.exports = {
     add,
