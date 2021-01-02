@@ -62,4 +62,51 @@ router.delete("/:id", (req, res) => {
         })
 })
 
+//add a comment to a post
+router.post("/:id/comments", (req, res) => {
+    const { id } = req.params
+    const comment = req.body
+
+    if (!comment.user_id) {
+        comment['user_id'] = parseInt(id, 10)
+    }
+
+    if (!comment.post_id) {
+        comment['post_id'] = parseInt(id, 10)
+    }
+    Users.findPostById(id)
+        .then(post => {
+            if (!post) {
+                res.status(404).json({ message: "Cannot Find Post" })
+            }
+            if (!comment.comment) {
+                res.status(400).json({ message: "Cannot Add Empty Comment" })
+            }
+            Users.addComment(comment, id)
+                .then(test => {
+                    if(test){
+                        res.status(200).json(test)
+                    }
+                })
+                .catch(error => {
+                    res.status(500).json({message: "Failed to add a Comment"})
+                })
+        })
+        .catch(error => {
+            res.status(500).json({message: "Failed to load Post"})
+        })
+})
+
+//get all of a posts comments
+router.get('/:id/comments', (req, res) => {
+    const { id } = req.params
+    Users.findPostsComments(id)
+        .then(comments => {
+            res.status(200).json(comments)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+})
+
 module.exports = router

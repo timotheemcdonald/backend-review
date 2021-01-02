@@ -18,8 +18,13 @@ module.exports = {
     removePost,
     findUserByUsername,
     findPostByTitle,
+    addComment,
+    addProfile,
+    findProfileByUsername,
+    findPostsComments,
 }
 
+//user helpers
 async function add(user) {
     const [id] = await db('users').insert(user)
 
@@ -32,10 +37,6 @@ function find() {
 
 function findUserByUsername(username){
     return db("users").where({username}).first()
-}
-
-function findPostByTitle(title){
-    return db("posts").where({title}).first()
 }
 
 function findById(id) {
@@ -59,10 +60,15 @@ function update(id, changes) {
         })
 }
 
+//post helpers
 function findPostById(id) {
     return db("posts")
         .where({ id })
         .first()
+}
+
+function findPostByTitle(title){
+    return db("posts").where({title}).first()
 }
 
 async function addPost(post, user_id) {
@@ -85,6 +91,7 @@ function findUserPosts(user_id) {
         .where({ user_id })
 }
 
+
 function updatePost(id, changes) {
     return db("posts")
         .where({ id })
@@ -98,4 +105,59 @@ function removePost(id) {
     return db("posts")
         .where({ id })
         .del();
+}
+
+//profile helpers
+function findProfileById(id){
+    return db('profile')
+    .where({id})
+    .first()
+}
+
+async function addProfile(profile, post_id, user_id){
+    const [id] = await db("profile")
+    .where({user_id})
+    .where({post_id})
+    .insert(profile)
+    return findProfileById(id);
+}
+
+function findProfileByUsername(user_id){
+    return db("users")
+    .join("profile", "users.id", "profile.user_id")
+    .select(
+        "users.id as userID",
+        "users.username as username",
+        "profile.id as profileID",
+        "profile.name as title",
+        "profile.bio as bio"
+    )
+}
+
+//comment helpers
+function findCommentById(id){
+    return db('comments')
+    .where({id})
+}
+
+async function addComment(comment, post_id, user_id){
+    const [id] = await db("comments")
+    .where({ post_id, user_id })
+    .insert(comment)
+    return findCommentById(id)
+}
+
+function findPostsComments(post_id){
+    return db("posts")
+    .join("comments", "posts.id", "comments.post_id")
+    .join("users", "users.id", "comments.user_id")
+    .select(
+        "users.id as userID",
+        "users.username as username",
+        "posts.id as postID",
+        "posts.title",
+        "comments.comment",
+        "comments.id"
+    )
+    .where({post_id})
 }

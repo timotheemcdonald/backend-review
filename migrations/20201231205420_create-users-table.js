@@ -68,14 +68,6 @@ exports.up = function (knex) {
         .inTable('posts')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
-      //profile foreign key
-      tbl.integer('profile_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('profile')
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE')
     })
 };
 

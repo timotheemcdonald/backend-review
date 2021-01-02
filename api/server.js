@@ -1,7 +1,6 @@
 const express = require('express')
 const userRouter = require('../routes/users-routes')
 const postRouter = require('../routes/posts-routes')
-const Users = require('../models/dbHelpers')
 
 const server = express()
 
