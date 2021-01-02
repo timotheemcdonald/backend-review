@@ -40,7 +40,6 @@ exports.up = function (knex) {
         .onUpdate('CASCADE')
       //foreign key to posts
       tbl.integer('post_id')
-        .notNullable()
         .unsigned()
         .references('id')
         .inTable('posts')

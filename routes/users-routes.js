@@ -126,6 +126,35 @@ router.patch('/:id', (req, res) => {
         })
 })
 
+//create a user's profile
+router.post("/:id/profile", (req, res) => {
+    const {id} = req.params
+    const profile = req.body
+
+    if(!profile.user_id){
+        profile['user_id'] = parseInt(id, 10)
+    }
+    
+    Users.findById(id)
+    .then(user => {
+        if(!user){
+            res.status(404).json({message: "Invalid User ID"})
+        }
+        Users.addProfile(profile, id)
+        .then(profile => {
+            if(profile){
+                res.status(200).json(profile)
+            }
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    })
+    .catch(error => {
+        res.status(500).json({message: "Error finding User"})
+    })
+})
+
 //create a user's posts
 router.post("/:id/posts", (req, res) => {
     const { id } = req.params

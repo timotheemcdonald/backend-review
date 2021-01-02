@@ -21,6 +21,7 @@ module.exports = {
     addComment,
     addProfile,
     findProfileByUsername,
+    findProfileById,
     findPostsComments,
 }
 
@@ -111,27 +112,31 @@ function removePost(id) {
 function findProfileById(id){
     return db('profile')
     .where({id})
-    .first()
 }
 
-async function addProfile(profile, post_id, user_id){
+async function addProfile(profile, user_id){
     const [id] = await db("profile")
     .where({user_id})
-    .where({post_id})
     .insert(profile)
     return findProfileById(id);
 }
 
+
+//this doesn't work
 function findProfileByUsername(user_id){
     return db("users")
-    .join("profile", "users.id", "profile.user_id")
+    .join("profile", "users.id", "profile.user_id" )
+    // .join("posts", "posts.id", "profile.post_id")
     .select(
         "users.id as userID",
-        "users.username as username",
+        "users.username",
         "profile.id as profileID",
-        "profile.name as title",
-        "profile.bio as bio"
+        "profile.profileName",
+        "profile.bio",
+        // "posts.title",
+        // "posts.id as postID"
     )
+    .where({ user_id })
 }
 
 //comment helpers

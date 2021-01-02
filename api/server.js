@@ -1,6 +1,7 @@
 const express = require('express')
 const userRouter = require('../routes/users-routes')
 const postRouter = require('../routes/posts-routes')
+const profileRouter = require('../routes/profile-routes')
 
 const server = express()
 
@@ -13,6 +14,6 @@ server.get('/', (req, res) => {
 
 server.use('/api/users', userRouter)
 server.use('/api/posts', postRouter)
-
+server.use('/api/profile', profileRouter)
 
 module.exports = server
