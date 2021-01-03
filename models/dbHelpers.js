@@ -124,19 +124,20 @@ async function addProfile(profile, user_id){
 
 //this doesn't work
 function findProfileByUsername(user_id){
-    return db("users")
-    .join("profile", "users.id", "profile.user_id" )
-    // .join("posts", "posts.id", "profile.post_id")
+    return db("display")
+    .join("profile", "profile.id")
+    .join("posts", "posts.id")
+    .join("users", "users.id")
     .select(
         "users.id as userID",
-        "users.username",
+        "users.username as username",
         "profile.id as profileID",
         "profile.profileName",
         "profile.bio",
-        // "posts.title",
-        // "posts.id as postID"
+        "posts.title",
+        "posts.id as postID"
     )
-    .where({ user_id })
+    .where({ username: user_id })
 }
 
 //comment helpers

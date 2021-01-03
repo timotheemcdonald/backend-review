@@ -38,13 +38,6 @@ exports.up = function (knex) {
         .inTable('users')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
-      //foreign key to posts
-      tbl.integer('post_id')
-        .unsigned()
-        .references('id')
-        .inTable('posts')
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE')
     })
     .createTable('comments', tbl => {
       tbl.increments()
@@ -68,8 +61,34 @@ exports.up = function (knex) {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
     })
+    .createTable('display', tbl => {
+            //foreign key to users
+            tbl.integer('user_id')
+            .unsigned()
+            .notNullable()
+            .references('id')
+            .inTable('users')
+            .onDelete('CASCADE')
+            .onUpdate('CASCADE')
+          //foreignkeytoposts
+          tbl.integer('post_id')
+            .notNullable()
+            .unsigned()
+            .references('id')
+            .inTable('posts')
+            .onDelete('CASCADE')
+            .onUpdate('CASCADE')
+          //foreignkeytoprofile
+          tbl.integer('profile_id')
+          .notNullable()
+          .unsigned()
+          .references('id')
+          .inTable('profile')
+          .onDelete('CASCADE')
+          .onUpdate('CASCADE')
+    })
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('comments').dropTableIfExists('profile').dropTableIfExists('posts').dropTableIfExists('users')
+  return knex.schema.dropTableIfExists('display').dropTableIfExists('comments').dropTableIfExists('profile').dropTableIfExists('posts').dropTableIfExists('users')
 };
