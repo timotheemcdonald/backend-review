@@ -20,9 +20,11 @@ module.exports = {
     findPostByTitle,
     addComment,
     addProfile,
+    findUserComments,
     findProfileByUsername,
     findProfileById,
     findPostsComments,
+    findAllPosts,
 }
 
 //user helpers
@@ -62,6 +64,10 @@ function update(id, changes) {
 }
 
 //post helpers
+function findAllPosts(){
+    return db("posts")
+}
+
 function findPostById(id) {
     return db("posts")
         .where({ id })
@@ -121,23 +127,16 @@ async function addProfile(profile, user_id){
     return findProfileById(id);
 }
 
-
-//this doesn't work
-function findProfileByUsername(user_id){
-    return db("display")
-    .join("profile", "profile.id")
-    .join("posts", "posts.id")
-    .join("users", "users.id")
+function findProfileByUsername(username){
+    return db('users')
+    .join('profile', 'users.id', 'profile.user_id')
+    .join('posts', 'users.id', 'posts.user_id')
     .select(
-        "users.id as userID",
-        "users.username as username",
-        "profile.id as profileID",
-        "profile.profileName",
-        "profile.bio",
-        "posts.title",
-        "posts.id as postID"
+        'users.username as username',
+        'profile.profileName as profileName',
+        'profile.bio as bio',
     )
-    .where({ username: user_id })
+    .where({username})
 }
 
 //comment helpers
@@ -166,4 +165,17 @@ function findPostsComments(post_id){
         "comments.id"
     )
     .where({post_id})
+}
+
+function findUserComments(user_id){
+    return db("users")
+    .join("comments", "users.id", "comments.user_id")
+    .join("posts", "users.id", "posts.user_id")
+    .select(
+        "users.id",
+        "users.username as username",
+        "comments.comment",
+        "comments.id",
+        "posts.title"
+    )
 }

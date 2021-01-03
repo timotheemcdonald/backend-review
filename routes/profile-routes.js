@@ -23,17 +23,21 @@ router.get('/:id', (req, res) => {
 })
 
 //find profile by username
-//this doesn't work
-router.get('/:username', (req, res) => {
+router.get('/username/:username', (req, res) => {
     const {username} = req.params
 
     Users.findProfileByUsername(username)
-    .then(profile => {
-        res.status(200).json(profile)
+    .then(user => {
+        if(user){
+            res.status(200).json(user)
+        }else{
+            res.status(400).json({message: "Cannot find Profile associated with that Username"})
+        }
     })
     .catch(error => {
-        res.status(505).json(error)
+        res.status(500).json({message: "Error looking up Profile for that Username"})
     })
 })
+
 
 module.exports = router

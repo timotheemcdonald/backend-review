@@ -80,7 +80,7 @@ router.get('/:id', (req, res) => {
 })
 
 //get user by username
-router.get('/:username', (req, res) => {
+router.get('/username/:username', (req, res) => {
     const {username} = req.params
     Users.findUserByUsername(username)
     .then(user => {
@@ -190,13 +190,56 @@ router.post("/:id/posts", (req, res) => {
 //get all posts by a specific user
 router.get('/:id/posts', (req, res) => {
     const { id } = req.params
-    Users.findUserPosts(id)
-        .then(posts => {
-            res.status(200).json(posts)
-        })
-        .catch(error => {
-            res.status(500).json({ message: "Error retrieving Posts" })
-        })
+
+    Users.findById(id)
+    .then(user => {
+        if (user) {
+            Users.findUserPosts(id)
+            .then(posts => {
+                if(posts){
+                    res.status(200).json(posts)
+                }else{
+                    res.status(400).json({message: "No Posts associated with this User"})
+                }
+            })
+            .catch(error => {
+                res.status(500).json({ message: "Error retrieving Posts" })
+            })
+        } else {
+            res.status(404).json({ message: 'Cannot find User with that ID' })
+        }
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Cannot perform Operation' })
+    })
+})
+
+//get all comments by a specific user
+router.get('/:id/comments', (req, res) => {
+    const {id} = req.params
+
+    Users.findById(id)
+    .then(user => {
+        if (user) {
+            Users.findUserComments(id)
+            .then(comments => {
+                if(comments){
+                    res.status(200).json(comments)
+                }else{
+                    res.status(400).json({message: "No Comments associated with this User"})
+                }
+            })
+            .catch(error => {
+                res.status(500).json({message: "Error retrieving Comments"})
+            })
+        } else {
+            res.status(404).json({ message: 'Cannot find User with that ID' })
+        }
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Cannot perform Operation' })
+    })
+
 })
 
 module.exports = router
