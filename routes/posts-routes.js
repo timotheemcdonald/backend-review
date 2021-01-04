@@ -5,41 +5,6 @@ const router = express.Router()
 
 //all endpoints are for /api/posts
 
-//find all posts
-router.get('/', (req, res) => {
-    Users.findAllPosts()
-    .then(post =>{
-        res.status(200).json(post)
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error Finding Posts"})
-    })
-})
-
-//find post by title
-router.get('/find/:title', (req, res) => {
-    const {title} = req.params
-    Users.findPostByTitle(title)
-    .then(title => {
-        res.status(200).json(title)
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error Finding Post by Title"})
-    })
-})
-
-//find post by id
-router.get('/:id', (req, res) => {
-    const {id} = req.params
-    Users.findPostById(id)
-    .then(post => {
-        res.status(200).json(post)
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error finding Post by ID"})
-    })
-})
-
 //edit a post, id required
 router.patch('/:id', (req, res) => {
     const { id } = req.params
@@ -118,29 +83,6 @@ router.post("/:id/comments", (req, res) => {
         .catch(error => {
             res.status(500).json({message: "Failed to load Post"})
         })
-})
-
-//get all of a posts comments
-router.get('/:id/comments', (req, res) => {
-    const { id } = req.params
-
-    Users.findPostById(id)
-    .then(post => {
-        if (!post) {
-            res.status(404).json({ message: "Invalid Post Id" })
-        }
-        Users.findPostsComments(id)
-        .then(comments => {
-            res.status(200).json(comments)
-        })
-        .catch(error => {
-            res.status(500).json(error)
-        })
-    })
-    .catch(error => {
-        res.status(500).json({message: "Error finding Post by ID"})
-    })
-
 })
 
 module.exports = router
