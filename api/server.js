@@ -1,8 +1,11 @@
 const express = require('express')
 const session = require('express-session')
+
 const userRouter = require('../routes/users-routes')
 const postRouter = require('../routes/posts-routes')
 const profileRouter = require('../routes/profile-routes')
+const publicRouter = require('../routes/public-routes')
+
 const authRouter = require('../auth/auth-routes')
 const restricted = require('../auth/restricted-middleware')
 
@@ -27,9 +30,13 @@ server.get('/', (req, res) => {
     res.json({ message: 'Server Up and Running' })
 })
 
+server.use('/api/public', publicRouter)
+server.use('/api/auth', authRouter)
+
 server.use('/api/users', restricted, userRouter)
 server.use('/api/posts', restricted, postRouter)
 server.use('/api/profile', restricted, profileRouter)
-server.use('/api/auth', authRouter)
+
+
 
 module.exports = server
